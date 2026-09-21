@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Econoris</title>
+</head>
+<body>
+  <div class="notch"></div>
+
+  <!-- VUE 1 : AJOUT D'OPÉRATION -->
+  <section id="view-operation" class="view">
+    <header class="header-op">
+      <span class="type-indicator" id="type-indicator">Depense</span>
+      <div class="toggle-group">
+        <button type="button" class="btn-toggle active" id="btn-depense">
+          <span class="arrow red">↓</span> Dépense
+        </button>
+        <button type="button" class="btn-toggle" id="btn-revenu">
+          <span class="arrow">↑</span> Revenu
+        </button>
+      </div>
+    </header>
+
+    <form id="form-operation" class="form-body">
+      <div class="input-container">
+        <input type="number" step="0.01" id="op-amount" placeholder="Montant" required>
+      </div>
+
+      <div class="input-container">
+        <input type="text" id="op-name" maxlength="200" placeholder="Nom" required>
+        <span class="counter" id="char-counter">0/200</span>
+      </div>
+
+      <div class="input-container outline-box">
+        <label for="op-category">Catégorie</label>
+        <select id="op-category" required>
+          <option value="Courses">Courses</option>
+          <option value="Loisirs">Loisirs</option>
+          <option value="Factures">Factures</option>
+          <option value="Logement">Logement</option>
+          <option value="Salaire">Salaire</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+
+      <div class="input-container outline-box">
+        <label for="op-date">Date</label>
+        <input type="date" id="op-date" required>
+      </div>
+
+      <div id="op-feedback" class="feedback-msg"></div>
+
+      <button type="submit" class="btn-primary" id="btn-valider">Valider</button>
+    </form>
+  </section>
+
+  <!-- VUE 2 : CONNEXION EMAIL -->
+  <section id="view-login" class="view hidden">
+    <div class="auth-header">
+      <img src="icons/logo-144.png" alt="Econoris" class="logo">
+      <h1>Bienvenue sur Econoris</h1>
+      <p class="desc">
+        Connectez-vous pour retrouver vos finances en un coup d’œil.<br>
+        Éconoris vous permet de suivre vos dépenses et gérer votre budget de façon très simple et rapide.<br><br>
+        Econoris est gratuit, sans publicité, et respecte votre vie privée.
+      </p>
+
+      <ul class="faq-list">
+        <li>Comment créer un compte ? <span class="help-icon">?</span></li>
+        <li>Pourquoi il n'y a pas de mot de passe ? <span class="help-icon">?</span></li>
+        <li>Comment sont sécurisés mes données ? <span class="help-icon">?</span></li>
+      </ul>
+    </div>
+
+    <form id="form-login" class="form-body">
+      <div class="input-container icon-left">
+        <svg class="field-icon" viewBox="0 0 24 24" width="18" height="18">
+          <path fill="#a39d93" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>
+        <input type="email" id="login-email" placeholder="Email" required>
+      </div>
+
+      <div id="login-feedback" class="feedback-msg"></div>
+
+      <button type="submit" class="btn-primary">Se connecter / S'inscrire</button>
+    </form>
+  </section>
+
+  <!-- VUE 3 : CODE DE VÉRIFICATION -->
+  <section id="view-verify" class="view hidden">
+    <div class="auth-header">
+      <img src="icons/logo-144.png" alt="Econoris" class="logo">
+      <h1>Bienvenue sur Econoris</h1>
+      <p class="desc">Entrez le code de vérification que vous avez reçu par email</p>
+    </div>
+
+    <form id="form-verify" class="form-body">
+      <div class="input-container">
+        <input type="text" id="verify-code" placeholder="Code de vérification" required>
+      </div>
+
+      <div id="verify-feedback" class="feedback-msg"></div>
+
+      <button type="submit" class="btn-primary btn-narrow">Vérifier</button>
+    </form>
+  </section>
+
+  <script type="module" src="./src/popup.ts"></script>
+</body>
+</html>

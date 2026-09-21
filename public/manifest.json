@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Econoris",
+  "version": "1.0.0",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "econoris-addon@local",
+      "strict_min_version": "109.0"
+    }
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/logo-16.png",
+      "72": "icons/logo-72.png",
+      "144": "icons/logo-144.png"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.florobart.fr/*"
+  ]
+}

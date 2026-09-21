@@ -1,0 +1,260 @@
+:root {
+  --bg-color: #171510;
+  --input-bg: #1c1914;
+  --border-color: #3b362c;
+  --text-main: #f3efe6;
+  --text-muted: #8e877c;
+  --accent-gold: #ebb668;
+  --accent-gold-hover: #dca354;
+  --accent-red: #e04a43;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  width: 360px;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  padding: 12px 18px 20px 18px;
+  overflow-x: hidden;
+}
+
+.notch {
+  width: 38px;
+  height: 4px;
+  background-color: #4a4539;
+  border-radius: 2px;
+  margin: 0 auto 16px auto;
+}
+
+.view.hidden {
+  display: none !important;
+}
+
+/* Header de l'ajout */
+.header-op {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.type-indicator {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--accent-red);
+}
+
+.toggle-group {
+  display: flex;
+  background-color: #12100c;
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 2px;
+}
+
+.btn-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-toggle.active {
+  background-color: #3e3223;
+  color: var(--accent-red);
+}
+
+#btn-revenu.active {
+  color: #5bb381;
+}
+
+.arrow.red {
+  color: var(--accent-red);
+}
+
+/* Formulaire */
+.form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-container input[type="text"],
+.input-container input[type="number"],
+.input-container input[type="email"] {
+  width: 100%;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-main);
+  padding: 14px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.input-container input:focus,
+.outline-box:focus-within {
+  border-color: var(--accent-gold);
+}
+
+.counter {
+  display: block;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Conteneurs avec étiquette supérieure encastrée */
+.outline-box {
+  border: 1px solid var(--border-color);
+  background-color: var(--input-bg);
+  border-radius: 8px;
+  padding: 10px 14px 6px 14px;
+  position: relative;
+}
+
+.outline-box label {
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  background-color: var(--bg-color);
+  padding: 0 4px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.outline-box select,
+.outline-box input[type="date"] {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+  cursor: pointer;
+  color-scheme: dark;
+}
+
+/* Boutons d'action */
+.btn-primary {
+  width: 100%;
+  background-color: var(--accent-gold);
+  border: none;
+  border-radius: 8px;
+  color: #2b1c04;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 4px;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-gold-hover);
+}
+
+.btn-narrow {
+  width: 45%;
+  margin: 0 auto;
+}
+
+/* Vues Auth */
+.auth-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.auth-header .logo {
+  width: 58px;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+.auth-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.auth-header .desc {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #d1cbc1;
+  margin-bottom: 16px;
+}
+
+.faq-list {
+  list-style: none;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.faq-list li {
+  font-size: 0.8rem;
+  color: #f1ede4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.help-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--text-muted);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.icon-left {
+  display: flex;
+  align-items: center;
+}
+
+.icon-left .field-icon {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+}
+
+.icon-left input {
+  padding-left: 40px !important;
+}
+
+.feedback-msg {
+  font-size: 0.8rem;
+  text-align: center;
+  min-height: 18px;
+}
+.feedback-msg.error {
+  color: var(--accent-red);
+}
+.feedback-msg.success {
+  color: #5bb381;
+}
