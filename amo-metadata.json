@@ -1,0 +1,11 @@
+{
+  "summary": {
+    "fr": "Ajoutez vos dépenses et revenus à Econoris en quelques secondes, directement depuis votre navigateur."
+  },
+  "categories": [
+    "shopping"
+  ],
+  "version": {
+    "license": "GPL-3.0-or-later"
+  }
+}

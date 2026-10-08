@@ -1,12 +1,20 @@
+/* POST /users/login/request (FlorAccess) */
 export interface LoginRequestDto {
   email: string;
 }
 
-export interface VerifyRequestDto {
-  email: string;
-  code: string;
+export interface LoginRequestResponseDto {
+  token: string;
 }
 
-export interface AuthResponseDto {
+/* POST /users/login/confirm (FlorAccess) */
+export interface LoginConfirmDto {
+  email: string;
   token: string;
+  /* Code reçu par email */
+  secret: string;
+}
+
+export interface JwtResponseDto {
+  jwt: string;
 }

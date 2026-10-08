@@ -1,0 +1,49 @@
+name: Check build and version on PR to main
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check manifest version matches package.json
+        run: node scripts/sync-manifest-version.mjs --check
+
+      - name: Compare package version with latest tag
+        run: |
+          pkg_version=$(node -p "require('./package.json').version")
+          latest_tag=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || true)
+          if [ -z "$latest_tag" ]; then
+            echo "Aucun tag de version trouvé, la vérification est ignorée."
+            exit 0
+          fi
+          tag_version=${latest_tag#v}
+          if [ "$pkg_version" = "$tag_version" ]; then
+            echo "❌ La version du package.json ($pkg_version) n'a pas été modifiée depuis le dernier tag ($latest_tag). Lancez 'npm version patch|minor|major' avant de merger."
+            exit 1
+          fi
+          echo "✅ La version du package.json ($pkg_version) est différente du dernier tag ($latest_tag)."
+
+      - name: Type check and build
+        run: npm run build
+
+      - name: Lint extension
+        run: npx --yes web-ext@10.7.0 lint --source-dir dist

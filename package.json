@@ -1,19 +1,21 @@
 {
   "name": "econoris-extension",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Extension Chrome / Firefox pour ajouter rapidement des opérations dans Econoris.",
+  "private": true,
   "scripts": {
     "dev": "vite build --watch",
-    "build": "tsc --noEmit && vite build"
+    "typecheck": "tsc",
+    "build": "tsc && vite build",
+    "version": "node scripts/sync-manifest-version.mjs && git add public/manifest.json"
   },
   "keywords": [],
-  "author": "",
+  "author": "FloRobart",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
-    "@types/chrome": "^0.3.0",
+    "@types/chrome": "^0.3.4",
     "typescript": "^7.0.2",
-    "vite": "^8.3.0"
+    "vite": "^8.3.4"
   }
 }

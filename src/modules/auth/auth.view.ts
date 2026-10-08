@@ -1,81 +1,112 @@
 import { Router } from '../../core/router';
+import { setBusy, setFeedback } from '../../core/ui';
 import { AuthService } from './auth.service';
 
 export class AuthView {
-  private pendingEmail: string = '';
+  private formLogin: HTMLFormElement;
+  private inputEmail: HTMLInputElement;
+  private loginFeedback: HTMLElement;
 
-  private formLogin!: HTMLFormElement;
-  private inputEmail!: HTMLInputElement;
-  private loginFeedback!: HTMLElement;
+  private formVerify: HTMLFormElement;
+  private inputCode: HTMLInputElement;
+  private verifyEmail: HTMLElement;
+  private verifyFeedback: HTMLElement;
+  private btnResend: HTMLButtonElement;
+  private btnChangeEmail: HTMLButtonElement;
 
-  private formVerify!: HTMLFormElement;
-  private inputCode!: HTMLInputElement;
-  private verifyFeedback!: HTMLElement;
+  constructor(private router: Router, private onLoggedIn: () => void) {
+    this.formLogin = document.getElementById('form-login') as HTMLFormElement;
+    this.inputEmail = document.getElementById('login-email') as HTMLInputElement;
+    this.loginFeedback = document.getElementById('login-feedback') as HTMLElement;
+    this.formVerify = document.getElementById('form-verify') as HTMLFormElement;
+    this.inputCode = document.getElementById('verify-code') as HTMLInputElement;
+    this.verifyEmail = document.getElementById('verify-email') as HTMLElement;
+    this.verifyFeedback = document.getElementById('verify-feedback') as HTMLElement;
+    this.btnResend = document.getElementById('btn-resend-code') as HTMLButtonElement;
+    this.btnChangeEmail = document.getElementById('btn-change-email') as HTMLButtonElement;
 
-  constructor(private router: Router) {
-    this.bindElements();
     this.initEvents();
   }
 
-  private bindElements(): void {
-    const formLogin = document.getElementById('form-login');
-    const inputEmail = document.getElementById('login-email');
-    const loginFeedback = document.getElementById('login-feedback');
-    const formVerify = document.getElementById('form-verify');
-    const inputCode = document.getElementById('verify-code');
-    const verifyFeedback = document.getElementById('verify-feedback');
-
-    if (!formLogin || !formVerify) {
-      console.error("Éléments DOM d'authentification introuvables : vérifie les IDs dans popup.html !");
-      return;
+  /**
+   * Affiche l'étape de connexion adaptée : saisie du code si une demande est en cours, sinon saisie de l'email.
+   */
+  async show(message?: string): Promise<void> {
+    const pendingEmail = await AuthService.getPendingEmail();
+    if (pendingEmail) {
+      this.showVerify(pendingEmail);
+      if (message) setFeedback(this.verifyFeedback, message, 'error');
+    } else {
+      this.router.navigate('login');
+      this.inputEmail.focus();
+      if (message) setFeedback(this.loginFeedback, message, 'error');
     }
+  }
 
-    this.formLogin = formLogin as HTMLFormElement;
-    this.inputEmail = inputEmail as HTMLInputElement;
-    this.loginFeedback = loginFeedback as HTMLElement;
-    this.formVerify = formVerify as HTMLFormElement;
-    this.inputCode = inputCode as HTMLInputElement;
-    this.verifyFeedback = verifyFeedback as HTMLElement;
+  private showVerify(email: string): void {
+    this.verifyEmail.textContent = email;
+    this.router.navigate('verify');
+    this.inputCode.focus();
   }
 
   private initEvents(): void {
-    if (!this.formLogin || !this.formVerify) return;
-
     this.formLogin.addEventListener('submit', async (e) => {
       e.preventDefault();
-      this.clearFeedback(this.loginFeedback);
-      this.pendingEmail = this.inputEmail.value.trim();
+      setFeedback(this.loginFeedback);
+      const submit = this.formLogin.querySelector<HTMLButtonElement>('button[type="submit"]');
 
+      setBusy(submit, true);
       try {
-        await AuthService.sendVerificationCode(this.pendingEmail);
-        this.router.navigate('verify');
+        await AuthService.requestCode(this.inputEmail.value);
+        setFeedback(this.verifyFeedback);
+        this.inputCode.value = '';
+        this.showVerify(AuthService.normalizeEmail(this.inputEmail.value));
       } catch (err: unknown) {
-        this.showError(this.loginFeedback, (err as Error).message);
+        setFeedback(this.loginFeedback, (err as Error).message, 'error');
+      } finally {
+        setBusy(submit, false);
       }
     });
 
     this.formVerify.addEventListener('submit', async (e) => {
       e.preventDefault();
-      this.clearFeedback(this.verifyFeedback);
-      const code = this.inputCode.value.trim();
+      setFeedback(this.verifyFeedback);
+      const submit = this.formVerify.querySelector<HTMLButtonElement>('button[type="submit"]');
 
+      setBusy(submit, true);
       try {
-        await AuthService.verifyCode(this.pendingEmail, code);
+        await AuthService.confirmCode(this.inputCode.value);
         this.inputCode.value = '';
-        this.router.navigate('operation');
+        this.onLoggedIn();
       } catch (err: unknown) {
-        this.showError(this.verifyFeedback, (err as Error).message);
+        setFeedback(this.verifyFeedback, (err as Error).message, 'error');
+      } finally {
+        setBusy(submit, false);
       }
     });
-  }
 
-  private showError(el: HTMLElement, msg: string): void {
-    el.textContent = msg;
-    el.className = 'feedback-msg error';
-  }
+    this.btnResend.addEventListener('click', async () => {
+      setFeedback(this.verifyFeedback);
+      const email = this.verifyEmail.textContent ?? '';
 
-  private clearFeedback(el: HTMLElement): void {
-    el.textContent = '';
-    el.className = 'feedback-msg';
+      setBusy(this.btnResend, true);
+      try {
+        await AuthService.requestCode(email);
+        this.inputCode.value = '';
+        setFeedback(this.verifyFeedback, 'Un nouveau code vous a été envoyé.', 'success');
+      } catch (err: unknown) {
+        setFeedback(this.verifyFeedback, (err as Error).message, 'error');
+      } finally {
+        setBusy(this.btnResend, false);
+      }
+    });
+
+    this.btnChangeEmail.addEventListener('click', async () => {
+      await AuthService.cancelLogin();
+      setFeedback(this.verifyFeedback);
+      this.inputCode.value = '';
+      this.router.navigate('login');
+      this.inputEmail.focus();
+    });
   }
 }

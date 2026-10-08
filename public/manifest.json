@@ -2,13 +2,28 @@
   "manifest_version": 3,
   "name": "Econoris",
   "version": "1.0.0",
+  "description": "Ajoutez vos dépenses et revenus à Econoris en quelques secondes, directement depuis votre navigateur.",
+  "homepage_url": "https://econoris.florobart.fr",
   "browser_specific_settings": {
     "gecko": {
-      "id": "econoris-addon@local",
-      "strict_min_version": "109.0"
+      "id": "econoris-extension@florobart.fr",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": [
+          "authenticationInfo",
+          "personallyIdentifyingInfo",
+          "financialAndPaymentInfo"
+        ]
+      }
     }
   },
+  "icons": {
+    "16": "icons/logo-16.png",
+    "72": "icons/logo-72.png",
+    "144": "icons/logo-144.png"
+  },
   "action": {
+    "default_title": "Econoris",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/logo-16.png",
@@ -20,6 +35,22 @@
     "storage"
   ],
   "host_permissions": [
-    "https://*.florobart.fr/*"
-  ]
+    "https://econoris-server.florobart.fr/*",
+    "https://floraccess-server.florobart.fr/*",
+    "https://econoris.florobart.fr/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://econoris.florobart.fr/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'self' https://econoris-server.florobart.fr https://floraccess-server.florobart.fr"
+  }
 }

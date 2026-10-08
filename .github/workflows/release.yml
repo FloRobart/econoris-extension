@@ -1,0 +1,159 @@
+name: Release extension
+
+# À chaque push sur main dont la version (package.json) n'a pas encore de tag :
+#   1. build + lint + création des archives
+#   2. GitHub Release "vX.Y.Z" avec les archives en pièces jointes
+#   3. (optionnel) publication sur le Chrome Web Store et sur addons.mozilla.org
+#      → activée par les variables de dépôt PUBLISH_CHROME=true / PUBLISH_FIREFOX=true (voir README)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.vars.outputs.version }}
+      already_released: ${{ steps.vars.outputs.already_released }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Get package version
+        id: vars
+        run: |
+          version=$(node -p "require('./package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$version" > /dev/null; then
+            echo "already_released=true" >> "$GITHUB_OUTPUT"
+            echo "La version $version est déjà publiée (tag v$version existant) : rien à faire."
+          else
+            echo "already_released=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install dependencies
+        if: steps.vars.outputs.already_released == 'false'
+        run: npm ci
+
+      - name: Check manifest version matches package.json
+        if: steps.vars.outputs.already_released == 'false'
+        run: node scripts/sync-manifest-version.mjs --check
+
+      - name: Type check and build
+        if: steps.vars.outputs.already_released == 'false'
+        run: npm run build
+
+      - name: Lint extension
+        if: steps.vars.outputs.already_released == 'false'
+        run: npx --yes web-ext@10.7.0 lint --source-dir dist
+
+      - name: Package extension and sources
+        if: steps.vars.outputs.already_released == 'false'
+        env:
+          VERSION: ${{ steps.vars.outputs.version }}
+        run: |
+          mkdir -p artifacts
+          (cd dist && zip -r -X "../artifacts/econoris-extension-$VERSION.zip" .)
+          # Sources lisibles, exigées par addons.mozilla.org pour un code minifié
+          git archive --format=zip -o "artifacts/econoris-extension-$VERSION-source.zip" HEAD
+
+      - name: Upload artifacts
+        if: steps.vars.outputs.already_released == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension
+          path: |
+            artifacts/
+            dist/
+          if-no-files-found: error
+
+  github-release:
+    needs: build
+    if: needs.build.outputs.already_released == 'false'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: extension
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.build.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: Econoris extension v${{ needs.build.outputs.version }}
+          generate_release_notes: true
+          files: |
+            artifacts/econoris-extension-${{ needs.build.outputs.version }}.zip
+            artifacts/econoris-extension-${{ needs.build.outputs.version }}-source.zip
+
+  publish-chrome:
+    needs: [build, github-release]
+    if: needs.build.outputs.already_released == 'false' && vars.PUBLISH_CHROME == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: extension
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Upload and publish to the Chrome Web Store
+        env:
+          EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+          PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+        run: npx --yes chrome-webstore-upload-cli@4.0.2 --source "artifacts/econoris-extension-${{ needs.build.outputs.version }}.zip"
+
+  publish-firefox:
+    needs: [build, github-release]
+    if: needs.build.outputs.already_released == 'false' && vars.PUBLISH_FIREFOX == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: extension
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Submit to addons.mozilla.org
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+        run: |
+          npx --yes web-ext@10.7.0 sign \
+            --source-dir dist \
+            --artifacts-dir web-ext-artifacts \
+            --channel listed \
+            --amo-metadata amo-metadata.json \
+            --upload-source-code "artifacts/econoris-extension-${{ needs.build.outputs.version }}-source.zip" \
+            --approval-timeout 0

@@ -3,3 +3,7 @@
 # Node
 node_modules/
 dist/
+
+# Archives de publication
+artifacts/
+web-ext-artifacts/
