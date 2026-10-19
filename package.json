@@ -9,9 +9,17 @@
     "build": "tsc && vite build",
     "version": "node scripts/sync-manifest-version.mjs && git add public/manifest.json"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FloRobart/econoris-extension.git"
+  },
   "author": "FloRobart",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/FloRobart/econoris-extension/issues"
+  },
+  "homepage": "https://github.com/FloRobart/econoris-extension#readme",
+  "keywords": [],
   "type": "module",
   "devDependencies": {
     "@types/chrome": "^0.3.4",
