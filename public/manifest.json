@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Econoris",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Ajoutez vos dépenses et revenus à Econoris en quelques secondes, directement depuis votre navigateur.",
   "homepage_url": "https://econoris.florobart.fr",
   "browser_specific_settings": {
