@@ -1,6 +1,6 @@
 {
   "name": "econoris-extension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extension Chrome / Firefox pour ajouter rapidement des opérations dans Econoris.",
   "private": true,
   "scripts": {
@@ -22,7 +22,7 @@
   "keywords": [],
   "type": "module",
   "devDependencies": {
-    "@types/chrome": "^0.3.4",
+    "@types/chrome": "^0.3.5",
     "typescript": "^7.0.2",
     "vite": "^8.3.4"
   }
