@@ -5,9 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "vite build --watch",
-    "typecheck": "tsc",
     "build": "tsc && vite build",
-    "version": "node scripts/sync-manifest-version.mjs && git add public/manifest.json"
+    "version": "node scripts/sync-manifest-version.mjs && git add public/manifest.json",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "repository": {
     "type": "git",
@@ -22,8 +25,8 @@
   "keywords": [],
   "type": "module",
   "devDependencies": {
-    "@types/chrome": "^0.3.5",
+    "@types/chrome": "^0.3.6",
     "typescript": "^7.0.2",
-    "vite": "^8.3.4"
+    "vite": "^8.3.5"
   }
 }
