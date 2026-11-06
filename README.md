@@ -63,6 +63,8 @@ Charger l'extension :
 
 Sur le Chrome Web Store, la **première** publication doit être faite à la main (fiche, captures d'écran, politique de confidentialité). Les mises à jour suivantes peuvent ensuite être automatisées. Sur addons.mozilla.org, la première soumission peut être automatique grâce à `amo-metadata.json`.
 
+Les images des fiches des stores (captures d'écran et visuels promotionnels) sont dans `store-assets/`. Elles ne vont pas dans `public/` : tout ce dossier est copié dans `dist/`, donc dans l'extension installée chez chaque utilisateur.
+
 Dans *Settings → Secrets and variables → Actions* du dépôt :
 
 | Store | Variables | Secrets |

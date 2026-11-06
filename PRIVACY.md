@@ -1,6 +1,6 @@
 # Politique de confidentialité – Extension Econoris
 
-*Dernière mise à jour : 5 novembre 2026*
+*Dernière mise à jour : 6 novembre 2026*
 
 *[English version below](#privacy-policy--econoris-extension)*
 
@@ -20,6 +20,8 @@ L'extension Econoris pour Chrome et Firefox permet d'ajouter une dépense ou un 
 | Code de vérification et jeton de session | À la connexion, puis à chaque ajout d'opération | Prouver que vous êtes bien le titulaire du compte. |
 | Opérations saisies (montant, nom, catégorie, date) | Quand vous validez le formulaire | Les enregistrer dans votre budget Econoris. |
 | Adresse IP | À chaque requête | Elle est reçue par tout serveur web. Elle sert à la sécurité du service (limitation du nombre de requêtes, journaux techniques, dernière connexion). |
+
+Les journaux techniques du service de données d'Econoris enregistrent, pour chaque requête, l'adresse IP, la date, la requête et l'adresse email du compte qui l'envoie. Ils sont conservés temporairement, pour la sécurité du service et la protection contre les abus.
 
 Ces données sont envoyées en HTTPS à deux services exploités par l'éditeur de l'extension :
 
@@ -80,7 +82,7 @@ Toute modification de cette politique sera publiée sur cette page, avec une nou
 
 # Privacy Policy – Econoris extension
 
-*Last updated: November 5, 2026*
+*Last updated: November 6, 2026*
 
 The Econoris extension for Chrome and Firefox lets you add an expense or an income entry to your Econoris account from your browser. This page explains which data it uses and why.
 
@@ -98,6 +100,8 @@ The Econoris extension for Chrome and Firefox lets you add an expense or an inco
 | Verification code and session token | At sign-in, then each time you add an entry | To prove that you own the account. |
 | Entries you type (amount, name, category, date) | When you submit the form | To save them in your Econoris budget. |
 | IP address | On every request | Every web server receives it. It is used to keep the service secure (rate limiting, technical logs, last sign-in). |
+
+The technical logs of the Econoris data service record, for each request, the IP address, the date, the request and the email address of the account that sends it. They are kept for a limited time, to keep the service secure and to protect it against abuse.
 
 This data is sent over HTTPS to two services run by the publisher of the extension:
 
