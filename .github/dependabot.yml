@@ -10,12 +10,10 @@ updates:
     # Wait before adopting a new release, to limit the risk of compromised packages
     cooldown:
       default-days: 7
-    # Open one pull request for minor and patch updates, and another one for major updates
+    # One pull request for all the minor and patch updates. Every major update gets its own
+    # pull request, so that a breaking one does not block the others
     groups:
       minor-and-patch-updates:
         update-types:
           - "minor"
           - "patch"
-      major-updates:
-        update-types:
-          - "major"
