@@ -19,16 +19,16 @@
   },
   "icons": {
     "16": "icons/logo-16.png",
-    "72": "icons/logo-72.png",
-    "144": "icons/logo-144.png"
+    "32": "icons/logo-32.png",
+    "64": "icons/logo-64.png",
+    "128": "icons/logo-128.png"
   },
   "action": {
     "default_title": "Econoris",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/logo-16.png",
-      "72": "icons/logo-72.png",
-      "144": "icons/logo-144.png"
+      "32": "icons/logo-32.png"
     }
   },
   "permissions": [
