@@ -1,6 +1,6 @@
 # Econoris – extension navigateur
 
-Extension Chrome / Firefox (Manifest V3) pour ajouter une dépense ou un revenu dans [Econoris](https://econoris.florobart.fr) en quelques secondes, par exemple juste après un achat en ligne.
+Extension Chrome / Firefox (Manifest V3) pour ajouter une dépense ou un revenu dans [Econoris](https://econoris.fr) en quelques secondes, par exemple juste après un achat en ligne.
 
 ## Fonctionnement
 
@@ -13,7 +13,7 @@ L'authentification passe par [FlorAccess](https://github.com/FloRobart/FlorAcces
 
 La demande en cours (email + `token`) est conservée dans `storage.session` : on peut fermer la popup pour aller lire ses emails, puis la rouvrir sur l'écran de saisie du code.
 
-**Reprise de la session du site** : si vous êtes connecté sur `econoris.florobart.fr`, le content script `src/content/econoris-sync.ts` lit le JWT de l'application web (`localStorage["flutter.jwt"]`) et le transmet à l'extension. Ce n'est fait que si l'extension n'a pas déjà une session valide, et jamais avec une session antérieure à une déconnexion volontaire de l'extension.
+**Reprise de la session du site** : si vous êtes connecté sur `app.econoris.fr`, le content script `src/content/econoris-sync.ts` lit le JWT de l'application web (`localStorage["flutter.jwt"]`) et le transmet à l'extension. Ce n'est fait que si l'extension n'a pas déjà une session valide, et jamais avec une session antérieure à une déconnexion volontaire de l'extension.
 
 ### Stockage du JWT
 
@@ -62,6 +62,8 @@ Charger l'extension :
 ### Publication automatique sur les stores (optionnelle)
 
 Sur le Chrome Web Store, la **première** publication doit être faite à la main (fiche, captures d'écran, politique de confidentialité). Les mises à jour suivantes peuvent ensuite être automatisées. Sur addons.mozilla.org, la première soumission peut être automatique grâce à `amo-metadata.json`.
+
+Les images des fiches des stores (captures d'écran et visuels promotionnels) sont dans `store-assets/`. Elles ne vont pas dans `public/` : tout ce dossier est copié dans `dist/`, donc dans l'extension installée chez chaque utilisateur.
 
 Dans *Settings → Secrets and variables → Actions* du dépôt :
 

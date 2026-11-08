@@ -3,7 +3,7 @@
   "name": "Econoris",
   "version": "1.0.1",
   "description": "Ajoutez vos dépenses et revenus à Econoris en quelques secondes, directement depuis votre navigateur.",
-  "homepage_url": "https://econoris.florobart.fr",
+  "homepage_url": "https://econoris.fr",
   "browser_specific_settings": {
     "gecko": {
       "id": "econoris-extension@florobart.fr",
@@ -19,30 +19,30 @@
   },
   "icons": {
     "16": "icons/logo-16.png",
-    "72": "icons/logo-72.png",
-    "144": "icons/logo-144.png"
+    "32": "icons/logo-32.png",
+    "64": "icons/logo-64.png",
+    "128": "icons/logo-128.png"
   },
   "action": {
     "default_title": "Econoris",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/logo-16.png",
-      "72": "icons/logo-72.png",
-      "144": "icons/logo-144.png"
+      "32": "icons/logo-32.png"
     }
   },
   "permissions": [
     "storage"
   ],
   "host_permissions": [
-    "https://econoris-server.florobart.fr/*",
-    "https://floraccess-server.florobart.fr/*",
-    "https://econoris.florobart.fr/*"
+    "https://api.econoris.fr/*",
+    "https://api.floraccess.florobart.fr/*",
+    "https://app.econoris.fr/*"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://econoris.florobart.fr/*"
+        "https://app.econoris.fr/*"
       ],
       "js": [
         "content.js"
@@ -51,6 +51,6 @@
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'self' https://econoris-server.florobart.fr https://floraccess-server.florobart.fr"
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'self' https://api.econoris.fr https://api.floraccess.florobart.fr"
   }
 }

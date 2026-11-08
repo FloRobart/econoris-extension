@@ -1,6 +1,6 @@
 # Politique de confidentialité – Extension Econoris
 
-*Dernière mise à jour : 12 octobre 2026*
+*Dernière mise à jour : 6 novembre 2026*
 
 *[English version below](#privacy-policy--econoris-extension)*
 
@@ -21,10 +21,12 @@ L'extension Econoris pour Chrome et Firefox permet d'ajouter une dépense ou un 
 | Opérations saisies (montant, nom, catégorie, date) | Quand vous validez le formulaire | Les enregistrer dans votre budget Econoris. |
 | Adresse IP | À chaque requête | Elle est reçue par tout serveur web. Elle sert à la sécurité du service (limitation du nombre de requêtes, journaux techniques, dernière connexion). |
 
+Les journaux techniques du service de données d'Econoris enregistrent, pour chaque requête, l'adresse IP, la date, la requête et l'adresse email du compte qui l'envoie. Ils sont conservés temporairement, pour la sécurité du service et la protection contre les abus.
+
 Ces données sont envoyées en HTTPS à deux services exploités par l'éditeur de l'extension :
 
-- `floraccess-server.florobart.fr` : service d'authentification (FlorAccess) ;
-- `econoris-server.florobart.fr` : service de données d'Econoris.
+- `api.floraccess.florobart.fr` : service d'authentification (FlorAccess) ;
+- `api.econoris.fr` : service de données d'Econoris.
 
 ## Données conservées dans votre navigateur
 
@@ -38,7 +40,7 @@ Ces données sont rangées dans l'espace de stockage réservé à l'extension. L
 
 ## Accès au site Econoris
 
-L'extension exécute un script sur un seul site : `econoris.florobart.fr`. Si vous y êtes déjà connecté, ce script reprend votre session pour vous éviter de vous reconnecter dans l'extension. Il ne lit rien d'autre et ne fonctionne sur aucun autre site.
+L'extension exécute un script sur un seul site : `app.econoris.fr`. Si vous y êtes déjà connecté, ce script reprend votre session pour vous éviter de vous reconnecter dans l'extension. Il ne lit rien d'autre et ne fonctionne sur aucun autre site.
 
 ## Ce que l'extension ne fait pas
 
@@ -69,7 +71,7 @@ Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'ef
 ## Contact
 
 Responsable du traitement : Floris Robart
-Email : <florobart.github@gmail.com>
+Email : <contact@econoris.fr>
 Code source : <https://github.com/FloRobart/econoris-extension>
 
 ## Modifications
@@ -80,7 +82,7 @@ Toute modification de cette politique sera publiée sur cette page, avec une nou
 
 # Privacy Policy – Econoris extension
 
-*Last updated: October 12, 2026*
+*Last updated: November 6, 2026*
 
 The Econoris extension for Chrome and Firefox lets you add an expense or an income entry to your Econoris account from your browser. This page explains which data it uses and why.
 
@@ -99,10 +101,12 @@ The Econoris extension for Chrome and Firefox lets you add an expense or an inco
 | Entries you type (amount, name, category, date) | When you submit the form | To save them in your Econoris budget. |
 | IP address | On every request | Every web server receives it. It is used to keep the service secure (rate limiting, technical logs, last sign-in). |
 
+The technical logs of the Econoris data service record, for each request, the IP address, the date, the request and the email address of the account that sends it. They are kept for a limited time, to keep the service secure and to protect it against abuse.
+
 This data is sent over HTTPS to two services run by the publisher of the extension:
 
-- `floraccess-server.florobart.fr`: authentication service (FlorAccess);
-- `econoris-server.florobart.fr`: Econoris data service.
+- `api.floraccess.florobart.fr`: authentication service (FlorAccess);
+- `api.econoris.fr`: Econoris data service.
 
 ## Data kept in your browser
 
@@ -116,7 +120,7 @@ This data is kept in the storage area reserved for the extension. Websites and o
 
 ## Access to the Econoris website
 
-The extension runs a script on a single website: `econoris.florobart.fr`. If you are already signed in there, this script reuses your session so that you do not have to sign in again in the extension. It reads nothing else and does not run on any other website.
+The extension runs a script on a single website: `app.econoris.fr`. If you are already signed in there, this script reuses your session so that you do not have to sign in again in the extension. It reads nothing else and does not run on any other website.
 
 ## What the extension does not do
 
@@ -147,7 +151,7 @@ Under the GDPR, you have the right to access, correct, erase, export and object 
 ## Contact
 
 Data controller: Floris Robart
-Email: <florobart.github@gmail.com>
+Email: <contact@econoris.fr>
 Source code: <https://github.com/FloRobart/econoris-extension>
 
 ## Changes
