@@ -1,10 +1,10 @@
 export const CONFIG = {
   /* URLs sans "/" final : les endpoints commencent tous par "/" */
-  DATA_API_URL: 'https://econoris-server.florobart.fr',
-  AUTH_API_URL: 'https://floraccess-server.florobart.fr',
+  DATA_API_URL: 'https://api.econoris.fr',
+  AUTH_API_URL: 'https://api.floraccess.florobart.fr',
 
   /* Site web Econoris (application Flutter) dont on peut récupérer la session */
-  WEB_APP_URL: 'https://econoris.florobart.fr',
+  WEB_APP_URL: 'https://app.econoris.fr',
 
   /* Clés de stockage de l'extension (les deux premières sont dupliquées dans src/content/econoris-sync.ts) */
   TOKEN_STORAGE_KEY: 'econoris_token',

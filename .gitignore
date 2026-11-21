@@ -1,5 +1,8 @@
 .env*
 
+# Local settings of Claude Code
+.claude/
+
 # Node
 node_modules/
 dist/
