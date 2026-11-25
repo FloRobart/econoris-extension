@@ -36,7 +36,7 @@ Le bouton « Se déconnecter » déconnecte uniquement l'extension. `POST /users
 
 Les catégories viennent de `GET /categories` : un arbre de catégories principales et de sous-catégories, chacune avec ses mots-clés de recherche. Elles sont gardées en cache un jour dans `storage.local`, et ce cache sert encore si l'API ne répond pas.
 
-Le champ « Catégorie » est un champ de recherche (motif ARIA *combobox*) : il liste les catégories correspondantes pendant la saisie, sans tenir compte des majuscules ni des accents, et trouve aussi une catégorie par ses mots-clés (« essence » → Carburant). Sans recherche, il propose les 5 dernières catégories choisies, puis toutes les catégories groupées par catégorie principale. Les flèches parcourent la liste, Entrée choisit, Échap ferme. Les règles de recherche sont les mêmes que dans l'application.
+Le champ « Catégorie » est un champ de recherche (motif ARIA *combobox*) : il liste les catégories correspondantes pendant la saisie, sans tenir compte des majuscules ni des accents, et trouve aussi une catégorie par ses mots-clés (« essence » → Carburant). Si rien ne correspond, il tolère les fautes de frappe avec une distance de Damerau-Levenshtein (« esence », « lyoer ») : aucune faute dans un mot de moins de 4 lettres, une jusqu'à 7 lettres, deux au-delà. Sans recherche, il propose les 5 dernières catégories choisies, puis toutes les catégories groupées par catégorie principale. Les flèches parcourent la liste, Entrée choisit, Échap ferme. Les règles de recherche sont les mêmes que dans l'application.
 
 ## Développement
 

@@ -61,16 +61,28 @@ export class CategoryCatalog {
    * A word matches the beginning of a word of the label, of a search keyword, or of the label of the parent:
    * "logement" finds "Logement" then all its sub-categories, "essence" finds "Carburant et recharge".
    * The labels that start with the query come first, then the other own matches, then the matches through the parent.
+   * When nothing matches, the search tolerates typos: "esence" still finds "Carburant et recharge".
    */
   search(query: string): CategoryDto[] {
     const normalizedQuery = normalizeForSearch(query);
     if (!normalizedQuery) return [];
 
     const queryWords = normalizedQuery.split(' ');
+    const exactMatches = this.rankedCategories(searchEntry => rankOf(searchEntry, normalizedQuery, queryWords));
+    if (exactMatches.length > 0) return exactMatches;
+
+    /* Only as a fallback: with typos allowed, a correct query would also bring many unrelated categories */
+    return this.rankedCategories(searchEntry => typoRankOf(searchEntry, queryWords));
+  }
+
+  /**
+   * The categories that get a rank, the best rank first, in display order for a same rank.
+   */
+  private rankedCategories(rankOfEntry: (searchEntry: CategorySearchEntry) => number | null): CategoryDto[] {
     const matches: { category: CategoryDto; rank: number; displayOrder: number }[] = [];
 
     this.searchEntries.forEach((searchEntry, displayOrder) => {
-      const rank = rankOf(searchEntry, normalizedQuery, queryWords);
+      const rank = rankOfEntry(searchEntry);
       if (rank === null) return;
       matches.push({ category: searchEntry.category, rank, displayOrder });
     });
@@ -112,6 +124,92 @@ function rankOf(searchEntry: CategorySearchEntry, normalizedQuery: string, query
 
 function startsAWord(words: string[], queryWord: string): boolean {
   return words.some(word => word.startsWith(queryWord));
+}
+
+/**
+ * The rank of a category for a query with typos, or null if it does not match.
+ * The fewer typos the better and, for a same number of typos, the labels that start with the first word of the query
+ * come first, as in the search without typos: "logment" finds "Logement" before "Épargne logement".
+ */
+function typoRankOf(searchEntry: CategorySearchEntry, queryWords: string[]): number | null {
+  const typoCount = typoCountOf(searchEntry, queryWords);
+  if (typoCount === null) return null;
+
+  const firstQueryWord = queryWords[0];
+  const firstLabelWord = searchEntry.normalizedLabel.split(' ')[0];
+  const labelStartsWithQuery = prefixEditDistance(firstQueryWord, firstLabelWord) <= allowedTypoCountOf(firstQueryWord);
+
+  /* Two ranks per typo count: one more typo always ranks lower, whatever the label starts with */
+  return typoCount * 2 + (labelStartsWithQuery ? 0 : 1);
+}
+
+/**
+ * The number of typos to fix so that every word of the query starts a word of the category or of its parent,
+ * or null if a word of the query needs more typo fixes than its length allows.
+ */
+function typoCountOf(searchEntry: CategorySearchEntry, queryWords: string[]): number | null {
+  const categoryWords = [...searchEntry.ownWords, ...searchEntry.parentWords];
+  let typoCount = 0;
+
+  for (const queryWord of queryWords) {
+    const wordTypoCount = Math.min(queryWord.length, ...categoryWords.map(word => prefixEditDistance(queryWord, word)));
+    if (wordTypoCount > allowedTypoCountOf(queryWord)) return null;
+    typoCount += wordTypoCount;
+  }
+
+  return typoCount;
+}
+
+/**
+ * How many typos a query word may contain: none in a short word, where one typo already makes another word.
+ */
+export function allowedTypoCountOf(queryWord: string): number {
+  if (queryWord.length < 4) return 0;
+  if (queryWord.length < 8) return 1;
+  return 2;
+}
+
+/**
+ * The Damerau-Levenshtein distance (optimal string alignment) between a query word and the closest beginning of a word:
+ * the fewest inserted, deleted, replaced or swapped letters that turn the query word into a beginning of the word.
+ * "esence" is 1 typo away from "essence", "lyoer" 1 typo away from "loyer", "carbu" 0 typo away from "carburant".
+ */
+export function prefixEditDistance(queryWord: string, word: string): number {
+  /* distances[i][j]: distance between the first i letters of the query word and the first j letters of the word */
+  const distances: number[][] = [];
+  for (let i = 0; i <= queryWord.length; i++) {
+    distances.push([i]);
+  }
+  for (let j = 1; j <= word.length; j++) {
+    distances[0].push(j);
+  }
+
+  for (let i = 1; i <= queryWord.length; i++) {
+    for (let j = 1; j <= word.length; j++) {
+      distances[i][j] = editDistanceStep(distances, queryWord, word, i, j);
+    }
+  }
+
+  /* Any beginning of the word will do: the user may not have typed the whole word yet */
+  return Math.min(...distances[queryWord.length]);
+}
+
+/**
+ * The distance between the first i letters of the query word and the first j letters of the word,
+ * from the distances of the shorter beginnings.
+ */
+function editDistanceStep(distances: number[][], queryWord: string, word: string, i: number, j: number): number {
+  const replacementCost = queryWord[i - 1] === word[j - 1] ? 0 : 1;
+  const bestDistance = Math.min(
+    distances[i - 1][j] + 1,
+    distances[i][j - 1] + 1,
+    distances[i - 1][j - 1] + replacementCost
+  );
+
+  const isSwappedPair = i > 1 && j > 1 && queryWord[i - 1] === word[j - 2] && queryWord[i - 2] === word[j - 1];
+  if (!isSwappedPair) return bestDistance;
+
+  return Math.min(bestDistance, distances[i - 2][j - 2] + 1);
 }
 
 function searchWordsOf(text: string): string[] {
