@@ -73,6 +73,9 @@ export class StorageService {
   static async logout(): Promise<void> {
     await ext.storage.local.set({ [CONFIG.WEB_SYNC_AFTER_STORAGE_KEY]: Math.floor(Date.now() / 1000) });
     await StorageService.clearToken();
+
+    /* The categories chosen last tell what the user spends on: they leave with the session */
+    await ext.storage.local.remove(CONFIG.RECENT_CATEGORIES_STORAGE_KEY);
   }
 
   static isTokenValid(token: string | null): boolean {

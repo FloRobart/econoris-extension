@@ -52,9 +52,12 @@
         <span class="counter" id="char-counter">0/200</span>
       </div>
 
-      <div class="input-container outline-box">
+      <div class="input-container outline-box category-picker">
         <label for="op-category">Catégorie</label>
-        <select id="op-category" title="Catégorie de l'opération" required></select>
+        <input type="text" id="op-category" title="Catégorie de l'opération" placeholder="Chargement des catégories…"
+               role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="op-category-list"
+               autocomplete="off" spellcheck="false" disabled required>
+        <ul id="op-category-list" class="category-list hidden" role="listbox" aria-label="Catégories"></ul>
       </div>
 
       <div class="input-container outline-box">

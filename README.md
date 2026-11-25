@@ -21,6 +21,8 @@ La demande en cours (email + `token`) est conservée dans `storage.session` : on
 | --- | --- | --- |
 | JWT | `storage.local` de l'extension | Inaccessible aux pages web et aux autres extensions. Supprimé à l'expiration, sur une réponse 401 et à la déconnexion. |
 | Connexion en cours | `storage.session` | En mémoire uniquement, effacée à la fermeture du navigateur, inaccessible aux content scripts. |
+| Catégories | `storage.local` | Identiques pour tous les utilisateurs. Rechargées une fois par jour. |
+| 5 dernières catégories choisies | `storage.local` | Suggérées en premier. Supprimées à la déconnexion. |
 
 Les permissions sont limitées aux trois domaines Econoris / FlorAccess, et la CSP des pages de l'extension n'autorise les requêtes que vers les deux API.
 
@@ -28,7 +30,13 @@ Le bouton « Se déconnecter » déconnecte uniquement l'extension. `POST /users
 
 ### Ajout d'une opération
 
-`POST /operations` sur l'API Econoris, avec le même format que l'application : `levy_date`, `label`, `amount` (négatif pour une dépense), `category`, `is_validate` (vrai si la date est aujourd'hui ou passée).
+`POST /operations` sur l'API Econoris, avec le même format que l'application : `levy_date`, `label`, `amount` (négatif pour une dépense), `category_id`, `is_validate` (vrai si la date est aujourd'hui ou passée).
+
+### Catégories
+
+Les catégories viennent de `GET /categories` : un arbre de catégories principales et de sous-catégories, chacune avec ses mots-clés de recherche. Elles sont gardées en cache un jour dans `storage.local`, et ce cache sert encore si l'API ne répond pas.
+
+Le champ « Catégorie » est un champ de recherche (motif ARIA *combobox*) : il liste les catégories correspondantes pendant la saisie, sans tenir compte des majuscules ni des accents, et trouve aussi une catégorie par ses mots-clés (« essence » → Carburant). Sans recherche, il propose les 5 dernières catégories choisies, puis toutes les catégories groupées par catégorie principale. Les flèches parcourent la liste, Entrée choisit, Échap ferme. Les règles de recherche sont les mêmes que dans l'application.
 
 ## Développement
 

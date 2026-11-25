@@ -1,6 +1,6 @@
 # Politique de confidentialité – Extension Econoris
 
-*Dernière mise à jour : 6 novembre 2026*
+*Dernière mise à jour : 25 novembre 2026*
 
 *[English version below](#privacy-policy--econoris-extension)*
 
@@ -35,6 +35,8 @@ Ces données sont envoyées en HTTPS à deux services exploités par l'éditeur 
 | Jeton de session | Jusqu'à son expiration, votre déconnexion ou la désinstallation de l'extension. |
 | Demande de connexion en cours (email et jeton temporaire) | 30 minutes au plus, et jamais au-delà de la fermeture du navigateur. |
 | Thème choisi (clair, sombre ou système) | Jusqu'à la désinstallation de l'extension. |
+| Liste des catégories d'Econoris (la même pour tous les utilisateurs) | Mise à jour une fois par jour, jusqu'à la désinstallation de l'extension. |
+| Dernières catégories choisies (5 au plus), pour vous les proposer en premier | Jusqu'à votre déconnexion ou la désinstallation de l'extension. |
 
 Ces données sont rangées dans l'espace de stockage réservé à l'extension. Les sites web et les autres extensions n'y ont pas accès.
 
@@ -57,7 +59,7 @@ Vos données ne sont ni vendues, ni louées, ni cédées.
 
 Votre compte et vos opérations sont conservés tant que vous ne supprimez pas votre compte. Les comptes inactifs ne sont pas supprimés automatiquement. Vous pouvez à tout moment :
 
-- vous déconnecter de l'extension, ce qui efface le jeton de session de votre navigateur ;
+- vous déconnecter de l'extension, ce qui efface de votre navigateur le jeton de session et les dernières catégories choisies ;
 - désinstaller l'extension, ce qui efface toutes les données qu'elle a enregistrées dans votre navigateur ;
 - modifier ou supprimer vos opérations depuis l'application Econoris ;
 - supprimer votre compte depuis l'application Econoris, grâce au bouton de suppression du compte : la suppression est définitive.
@@ -82,7 +84,7 @@ Toute modification de cette politique sera publiée sur cette page, avec une nou
 
 # Privacy Policy – Econoris extension
 
-*Last updated: November 6, 2026*
+*Last updated: November 25, 2026*
 
 The Econoris extension for Chrome and Firefox lets you add an expense or an income entry to your Econoris account from your browser. This page explains which data it uses and why.
 
@@ -115,6 +117,8 @@ This data is sent over HTTPS to two services run by the publisher of the extensi
 | Session token | Until it expires, you sign out, or you uninstall the extension. |
 | Pending sign-in request (email and temporary token) | 30 minutes at most, and never after the browser is closed. |
 | Chosen theme (light, dark or system) | Until you uninstall the extension. |
+| List of the Econoris categories (the same for every user) | Refreshed once a day, until you uninstall the extension. |
+| Last chosen categories (5 at most), to suggest them first | Until you sign out or uninstall the extension. |
 
 This data is kept in the storage area reserved for the extension. Websites and other extensions cannot access it.
 
@@ -137,7 +141,7 @@ Your data is not sold, rented or transferred.
 
 Your account and your entries are kept until you delete your account. Inactive accounts are not deleted automatically. At any time, you can:
 
-- sign out of the extension, which removes the session token from your browser;
+- sign out of the extension, which removes the session token and the last chosen categories from your browser;
 - uninstall the extension, which removes all the data it stored in your browser;
 - edit or delete your entries from the Econoris app;
 - delete your account from the Econoris app, using the account deletion button: the deletion is permanent.
