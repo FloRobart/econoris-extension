@@ -7,7 +7,8 @@ export interface CreateOperationDto {
   label: string;
   /* Négatif pour une dépense, positif pour un revenu */
   amount: number;
-  category: string;
+  /* Id of a category of GET /categories */
+  category_id: number;
   is_validate: boolean;
 }
 

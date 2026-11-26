@@ -255,9 +255,78 @@ body {
   cursor: pointer;
 }
 
-.outline-box select option {
-  background-color: var(--input-bg);
+/* Category field: a text field with the list of the matching categories below it */
+.input-container.category-picker input[type="text"] {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 4px 0;
+}
+
+.input-container.category-picker input:disabled {
+  cursor: wait;
+}
+
+.category-list {
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 4px -14px -6px -14px;
+  border-top: 1px solid var(--border-color);
+}
+
+.category-list.hidden {
+  display: none;
+}
+
+.category-group {
+  padding: 8px 14px 4px 14px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.category-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 14px;
+  font-size: 0.88rem;
   color: var(--text-main);
+  cursor: pointer;
+}
+
+.category-option.category-main {
+  font-weight: 600;
+}
+
+.category-option.category-sub {
+  padding-left: 28px;
+  color: var(--text-soft);
+}
+
+.category-option:hover,
+.category-option.active {
+  background-color: var(--toggle-active-bg);
+}
+
+.category-option[aria-selected="true"] .category-label {
+  color: var(--accent-link);
+}
+
+.category-parent {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.category-empty {
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--text-muted);
 }
 
 /* Boutons d'action */
