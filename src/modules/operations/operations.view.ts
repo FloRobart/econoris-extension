@@ -1,6 +1,7 @@
-import { DEFAULT_CATEGORY, OPERATION_CATEGORIES } from '../../config/config';
 import { ApiError } from '../../core/http';
 import { setBusy, setFeedback } from '../../core/ui';
+import { CategoryPicker } from '../categories/categories.picker';
+import { CategoriesService } from '../categories/categories.service';
 import { OperationsService } from './operations.service';
 import type { CreateOperationDto, OperationType } from './operations.types';
 
@@ -18,7 +19,7 @@ export class OperationsView {
   private form: HTMLFormElement;
   private inputAmount: HTMLInputElement;
   private inputName: HTMLInputElement;
-  private inputCategory: HTMLSelectElement;
+  private categoryPicker: CategoryPicker;
   private inputDate: HTMLInputElement;
   private charCounter: HTMLElement;
   private feedback: HTMLElement;
@@ -33,7 +34,10 @@ export class OperationsView {
     this.form = document.getElementById('form-operation') as HTMLFormElement;
     this.inputAmount = document.getElementById('op-amount') as HTMLInputElement;
     this.inputName = document.getElementById('op-name') as HTMLInputElement;
-    this.inputCategory = document.getElementById('op-category') as HTMLSelectElement;
+    this.categoryPicker = new CategoryPicker(
+      document.getElementById('op-category') as HTMLInputElement,
+      document.getElementById('op-category-list') as HTMLUListElement
+    );
     this.inputDate = document.getElementById('op-date') as HTMLInputElement;
     this.charCounter = document.getElementById('char-counter') as HTMLElement;
     this.feedback = document.getElementById('op-feedback') as HTMLElement;
@@ -44,7 +48,6 @@ export class OperationsView {
     this.accountEmail = document.getElementById('account-email') as HTMLElement;
     this.btnLogout = document.getElementById('btn-logout') as HTMLButtonElement;
 
-    this.initCategories();
     this.resetForm();
     this.initEvents();
   }
@@ -53,16 +56,34 @@ export class OperationsView {
     this.accountEmail.textContent = email ?? '';
     this.accountEmail.title = email ?? '';
     this.inputAmount.focus();
+    void this.loadCategories();
   }
 
-  private initCategories(): void {
-    const sorted = [...OPERATION_CATEGORIES].sort((a, b) => a.localeCompare(b, 'fr'));
-    this.inputCategory.replaceChildren(...sorted.map(category => new Option(category, category)));
+  /**
+   * Loads the categories of the category field. The session must be open: GET /categories needs it.
+   */
+  private async loadCategories(): Promise<void> {
+    this.categoryPicker.setUnavailable('Chargement des catégories…');
+
+    try {
+      const [categories, recentCategoryIds] = await Promise.all([
+        CategoriesService.getCategories(),
+        CategoriesService.getRecentCategoryIds()
+      ]);
+      this.categoryPicker.setCategories(categories, recentCategoryIds);
+    } catch (err: unknown) {
+      if (err instanceof ApiError && err.isUnauthorized) {
+        this.callbacks.onSessionExpired(err.message);
+        return;
+      }
+      this.categoryPicker.setUnavailable('Catégories indisponibles');
+      setFeedback(this.feedback, (err as Error).message, 'error');
+    }
   }
 
   private resetForm(): void {
     this.form.reset();
-    this.inputCategory.value = DEFAULT_CATEGORY;
+    this.categoryPicker.clear();
     this.inputDate.value = toIsoDate(new Date());
     this.updateCharCounter();
   }
@@ -92,12 +113,18 @@ export class OperationsView {
         return;
       }
 
+      const categoryId = this.categoryPicker.selectedCategoryId;
+      if (categoryId === null) {
+        this.categoryPicker.reportMissingCategory();
+        return;
+      }
+
       const levyDate = this.inputDate.value;
       const dto: CreateOperationDto = {
         levy_date: levyDate,
         label: this.inputName.value.trim(),
         amount: this.currentType === 'EXPENSE' ? -amount : amount,
-        category: this.inputCategory.value,
+        category_id: categoryId,
         /* Comme l'application : une opération passée ou du jour est validée, une opération future ne l'est pas */
         is_validate: levyDate <= toIsoDate(new Date())
       };
@@ -105,6 +132,7 @@ export class OperationsView {
       setBusy(this.btnSubmit, true);
       try {
         await OperationsService.create(dto);
+        this.categoryPicker.setRecentCategoryIds(await CategoriesService.rememberChosenCategory(categoryId));
         this.resetForm();
         setFeedback(this.feedback, 'Opération ajoutée avec succès !', 'success');
         this.inputAmount.focus();
